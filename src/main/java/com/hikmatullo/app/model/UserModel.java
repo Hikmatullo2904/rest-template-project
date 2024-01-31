@@ -10,11 +10,10 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class UserModel {
-    private Long id;
-    private String email;
-    private String phoneNumber;
     private String name;
     private String surname;
+    private String email;
+    private String phoneNumber;
     private String password;
     private RoleName role;
 }
