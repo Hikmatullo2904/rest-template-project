@@ -9,11 +9,11 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class UserModel {
+public class UserResponseModel {
+    private Long id;
     private String name;
     private String surname;
     private String email;
     private String phoneNumber;
-    private String password;
     private RoleName role;
 }

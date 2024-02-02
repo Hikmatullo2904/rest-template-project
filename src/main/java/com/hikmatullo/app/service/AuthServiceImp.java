@@ -32,9 +32,18 @@ public class AuthServiceImp implements AuthService {
     }
 
     public String getToken(String username) {
+        String s = generateToken(username);
+        if(s == null) {
+            getRefreshToken(username, "123Admin$");
+        }
+        return getAccessToken(username);
+    }
+
+    @Override
+    public String generateToken(String username) {
         Optional<ExternalApiToken> token = tokenRepository.findAllValidToken(username);
         if(token.isEmpty()) {
-            return getAccessToken("404");
+            return getAccessToken(null);
         }
         if( isTokenExpired(token.get().getAccessToken())) {
             return getAccessToken(token.get().getRefreshToken());
@@ -56,8 +65,8 @@ public class AuthServiceImp implements AuthService {
     }
 
     public String getAccessToken(String refreshToken) {
-        if(refreshToken.equals("404")) {
-            return "401";
+        if(refreshToken == null) {
+            return null;
         }
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(refreshToken);
@@ -70,7 +79,7 @@ public class AuthServiceImp implements AuthService {
                     .findExternalApiTokenByRefreshToken(refreshToken);
 
             if(tokenFoundG.isEmpty()) {
-                return "401";
+                return null;
             }
 
             ExternalApiToken tokenFound = tokenFoundG.get();
